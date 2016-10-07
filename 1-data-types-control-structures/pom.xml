@@ -4,13 +4,16 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-      <groupId>com.cooksys.ftd.assignments</groupId>
-      <artifactId>combined-assignments</artifactId>
-      <version>${ftd.assignments.version}</version>
-    </parent>
+    <groupId>com.cooksys.ftd</groupId>
+    <artifactId>assignment-day-one</artifactId>
+    <version>1.0-SNAPSHOT</version>
 
-    <artifactId>1-data-types-control-structures</artifactId>
-    <version>${ftd.assignments.version}</version>
-
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </project>

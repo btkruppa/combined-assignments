@@ -1,20 +1,25 @@
 package com.cooksys.ftd.assignments.day.two.objects;
 
-import com.pholser.junit.quickcheck.Property;
-import com.pholser.junit.quickcheck.When;
-import com.pholser.junit.quickcheck.generator.InRange;
-import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
-import org.junit.Rule;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
-
 import static com.cooksys.ftd.assignments.day.two.objects.SimplifiedRational.gcd;
 import static com.cooksys.ftd.assignments.day.two.objects.SimplifiedRational.simplify;
 import static com.cooksys.ftd.assignments.day.two.objects.SimplifiedRationalGenerator.collapse;
 import static com.cooksys.ftd.assignments.day.two.objects.SimplifiedRationalGenerator.euclid;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Rule;
+import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
+
+import com.pholser.junit.quickcheck.Property;
+import com.pholser.junit.quickcheck.When;
+import com.pholser.junit.quickcheck.generator.InRange;
+import com.pholser.junit.quickcheck.runner.JUnitQuickcheck;
 
 @RunWith(JUnitQuickcheck.class)
+
 public class SimplifiedRationalProperties {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -191,4 +196,5 @@ public class SimplifiedRationalProperties {
         int d1 = r1.getDenominator();
         assertEquals(new SimplifiedRational(n1 * r2.getDenominator(), d1 * r2.getNumerator()), result);
     }
+
 }
