@@ -7,6 +7,7 @@ import java.util.List;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 
 import com.cooksys.serialization.assignment.model.Contact;
 import com.cooksys.serialization.assignment.model.Instructor;
@@ -27,9 +28,12 @@ public class Main {
 	 * @return a {@link Student} object built using the {@link Contact} data in
 	 *         the given file
 	 */
-	public static Student readStudent(File studentContactFile, JAXBContext jaxb) {
+	public static Student readStudent(File studentContactFile, JAXBContext jaxb) throws JAXBException {
+		Unmarshaller jaxbUnmarshaller = jaxb.createUnmarshaller();
+		Contact contact = (Contact) jaxbUnmarshaller.unmarshal(studentContactFile);
+		System.out.println(contact);
 
-		return null;
+		return new Student(contact);
 	}
 
 	/**
@@ -43,8 +47,12 @@ public class Main {
 	 * @return a list of {@link Student} objects built using the contact files
 	 *         in the given directory
 	 */
-	public static List<Student> readStudents(File studentDirectory, JAXBContext jaxb) {
-		return null; // TODO
+	public static List<Student> readStudents(File studentDirectory, JAXBContext jaxb) throws JAXBException {
+		List<Student> studentList = new ArrayList<>();
+		for(File studentFile : studentDirectory.listFiles()) {
+			studentList.add(readStudent(studentFile, jaxb));
+		}
+		return studentList;
 	}
 
 	/**
@@ -59,8 +67,12 @@ public class Main {
 	 * @return an {@link Instructor} object built using the {@link Contact} data
 	 *         in the given file
 	 */
-	public static Instructor readInstructor(File instructorContactFile, JAXBContext jaxb) {
-		return null; // TODO
+	public static Instructor readInstructor(File instructorContactFile, JAXBContext jaxb) throws JAXBException{
+		Unmarshaller jaxbUnmarshaller = jaxb.createUnmarshaller();
+		Contact contact = (Contact) jaxbUnmarshaller.unmarshal(instructorContactFile);
+		System.out.println(contact);
+
+		return new Instructor(contact);
 	}
 
 	/**
@@ -80,8 +92,14 @@ public class Main {
 	 * @return a {@link Session} object built from the data in the given
 	 *         directory
 	 */
-	public static Session readSession(File rootDirectory, JAXBContext jaxb) {
-		return null; // TODO
+	public static Session readSession(File rootDirectory, JAXBContext jaxb) throws JAXBException {
+		//JAXBContext jaxbContext = JAXBContext.newInstance(Session.class);
+
+		Unmarshaller jaxbUnmarshaller = jaxb.createUnmarshaller();
+		Session session = (Session) jaxbUnmarshaller.unmarshal(rootDirectory);
+		System.out.println(session);
+		return session;
+
 	}
 
 	/**
@@ -94,8 +112,17 @@ public class Main {
 	 * @param jaxb
 	 *            the JAXB context to use
 	 */
-	public static void writeSession(Session session, File sessionFile, JAXBContext jaxb) {
+	public static void writeSession(Session session, File sessionFile, JAXBContext jaxb) throws JAXBException {
 
+		Marshaller jaxbMarshaller = jaxb.createMarshaller();
+
+		jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
+		// Marshal the employees list in console
+		jaxbMarshaller.marshal(session, System.out);
+
+		// Marshal the employees list in file
+		jaxbMarshaller.marshal(session, sessionFile);
 	}
 
 	/**
@@ -116,33 +143,29 @@ public class Main {
 	 * </contact> </instructor> <students> ...
 	 * <student> <contact>...</contact> </student> ... </students> </session>
 	 */
-	public static void main(String[] args) throws JAXBException{
-		
-		Contact contact = new Contact("Blake","Kruppa","btkruppa513@gmail.com","9093804081");
-		Contact contact2 = new Contact("Bill","Jones","email","phone");
+	public static void main(String[] args) throws JAXBException {
+
+		Contact contact = new Contact("Blake", "Kruppa", "btkruppa513@gmail.com", "9093804081");
+		Contact contact2 = new Contact("Bill", "Jones", "email", "phone");
 		Instructor instructor = new Instructor(contact);
 		Student student = new Student(contact2);
-		
+
 		List<Student> studentList = new ArrayList<>();
-		for(int i = 0; i<10; i++) {
+		for (int i = 0; i < 10; i++) {
 			studentList.add(student);
 		}
-		
-		Session sessions = new Session("here","today",instructor, studentList);
-			
-		
-		
-		
-		JAXBContext jaxbContext = JAXBContext.newInstance(Session.class);
-		Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 
-		jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+		Session session = new Session("here", "today", instructor, studentList);
 
-		// Marshal the employees list in console
-		jaxbMarshaller.marshal(sessions, System.out);
+		JAXBContext jaxbSessionContext = JAXBContext.newInstance(Session.class);
+		JAXBContext jaxbStudentContext = JAXBContext.newInstance(Student.class);
 
-		// Marshal the employees list in file
-		jaxbMarshaller.marshal(sessions, new File("testing.xml"));
-		// TODO
+		File file = new File("./output/session.xml");
+
+		//writeSession(session, file, jaxbSessionContext);
+		//readSession(file, jaxbSessionContext);
+		//readStudent(new File("./input/memphis/08-08-2016/students/adam-fraser.xml"), jaxbStudentContext);
+		//readStudents(new File("./input/memphis/08-08-2016/students/"), jaxbStudentContext);
+		//readInstructor(new File("./input/memphis/08-08-2016/instructor.xml"), jaxbSessionContext);
 	}
 }

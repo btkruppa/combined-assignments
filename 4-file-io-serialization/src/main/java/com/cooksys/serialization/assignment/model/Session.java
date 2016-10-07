@@ -16,6 +16,7 @@ public class Session {
 	private String location;
 	@XmlAttribute
 	private String startDate;
+
 	
 	private Instructor instructor;
 
@@ -64,4 +65,14 @@ public class Session {
 	public void setStudents(List<Student> students) {
 		this.students = students;
 	}
+
+	@Override
+	public String toString() {
+		for (Student student : students) {
+			return "Session [location=" + location + ", startDate=" + startDate + ", instructor="
+					+ instructor.getContact().toString() + "," + "studnet = " + student.getContact().toString() + "]";
+		}
+		return "";
+	}
+
 }
