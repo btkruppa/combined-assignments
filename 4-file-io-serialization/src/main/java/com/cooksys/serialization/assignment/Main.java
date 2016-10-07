@@ -227,8 +227,8 @@ public class Main {
 
 		File file = new File("./output/session.xml");
 
-		readSession(new File("./input"), jaxbSessionContext);
-		// writeSession(session, file, jaxbSessionContext);
+		session = readSession(new File("./input"), jaxbSessionContext);
+		writeSession(session, file, jaxbSessionContext);
 		// readSessionXml(file, jaxbSessionContext);
 		// readStudent(new
 		// File("./input/memphis/08-08-2016/students/adam-fraser.xml"),
