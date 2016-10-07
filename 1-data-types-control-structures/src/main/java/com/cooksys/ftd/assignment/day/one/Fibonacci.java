@@ -2,6 +2,8 @@ package com.cooksys.ftd.assignment.day.one;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import java.util.*;
+
 /**
  * The Fibonacci sequence is simply and recursively defined: the first two elements are `1`, and
  * every other element is equal to the sum of its two preceding elements. For example:
@@ -13,6 +15,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
  * ...etc
  */
 public class Fibonacci {
+		
 
     /**
      * Calculates the value in the Fibonacci sequence at a given index. For example,
@@ -24,7 +27,13 @@ public class Fibonacci {
      * @throws IllegalArgumentException if the given index is less than zero
      */
     public static int atIndex(int i) throws IllegalArgumentException {
-        throw new NotImplementedException();
+    	if (i < 0) {
+    		throw new IllegalArgumentException();
+    	}
+    	else {
+    		int fibonacci[] = fibonacci(i+1);
+    		return fibonacci[i];
+    	}
     }
 
     /**
@@ -38,7 +47,18 @@ public class Fibonacci {
      *                                  given end is less than the given start
      */
     public static int[] slice(int start, int end) throws IllegalArgumentException {
-        throw new NotImplementedException();
+    	if(start > end || start < 0 || end < 0) {
+    		throw new IllegalArgumentException();
+    	}
+    	else {
+    		int fibonacci[] = fibonacci(end);
+    		int length = end - start;
+    		int result[] = new int[end-start];
+    		for(int i = 0; i < length; i++) { 
+    			result[i] = fibonacci[start+i];
+    		}
+    		return result;
+    	}
     }
 
     /**
@@ -49,6 +69,39 @@ public class Fibonacci {
      * @throws IllegalArgumentException if the given count is negative
      */
     public static int[] fibonacci(int count) throws IllegalArgumentException {
-        throw new NotImplementedException();
+    	if (count < 0) {
+			throw new IllegalArgumentException("Cannot have a fibonacci sequence of negative size");
+		}
+		else {
+			int[] fibonacciSequence = new int[count];
+			if (count == 0) {
+				
+			}
+			else if (count == 1) {
+				fibonacciSequence[0] = 1;
+			}
+			else if (count == 2) {
+				fibonacciSequence[0] = 1;
+				fibonacciSequence[1] = 1;
+			}
+			else {
+				fibonacciSequence[0] = 1;
+				fibonacciSequence[1] = 1;
+				for(int i = 2; i < count; i++) {
+					fibonacciSequence[i] = fibonacciSequence[i-1] + fibonacciSequence[i-2];
+				}
+			}
+			return fibonacciSequence;
+		}
+		
+        
     }
+    
+    public static void main(String[] args) {
+    	int[] fibonacciSequence = fibonacci(0);
+		for(int x : fibonacciSequence) { 
+			System.out.println(x);
+		}
+		System.out.println(atIndex(0));
+	}
 }
