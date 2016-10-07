@@ -1,1 +1,69 @@
-<session/>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<session location="here" startDate="today">
+    <instructor>
+        <contact first-name="Blake" last-name="Kruppa">
+            <email>btkruppa513@gmail.com</email>
+            <phoneNumber>9093804081</phoneNumber>
+        </contact>
+    </instructor>
+    <student>
+        <contact first-name="Bill" last-name="Jones">
+            <email>email</email>
+            <phoneNumber>phone</phoneNumber>
+        </contact>
+    </student>
+    <student>
+        <contact first-name="Bill" last-name="Jones">
+            <email>email</email>
+            <phoneNumber>phone</phoneNumber>
+        </contact>
+    </student>
+    <student>
+        <contact first-name="Bill" last-name="Jones">
+            <email>email</email>
+            <phoneNumber>phone</phoneNumber>
+        </contact>
+    </student>
+    <student>
+        <contact first-name="Bill" last-name="Jones">
+            <email>email</email>
+            <phoneNumber>phone</phoneNumber>
+        </contact>
+    </student>
+    <student>
+        <contact first-name="Bill" last-name="Jones">
+            <email>email</email>
+            <phoneNumber>phone</phoneNumber>
+        </contact>
+    </student>
+    <student>
+        <contact first-name="Bill" last-name="Jones">
+            <email>email</email>
+            <phoneNumber>phone</phoneNumber>
+        </contact>
+    </student>
+    <student>
+        <contact first-name="Bill" last-name="Jones">
+            <email>email</email>
+            <phoneNumber>phone</phoneNumber>
+        </contact>
+    </student>
+    <student>
+        <contact first-name="Bill" last-name="Jones">
+            <email>email</email>
+            <phoneNumber>phone</phoneNumber>
+        </contact>
+    </student>
+    <student>
+        <contact first-name="Bill" last-name="Jones">
+            <email>email</email>
+            <phoneNumber>phone</phoneNumber>
+        </contact>
+    </student>
+    <student>
+        <contact first-name="Bill" last-name="Jones">
+            <email>email</email>
+            <phoneNumber>phone</phoneNumber>
+        </contact>
+    </student>
+</session>
