@@ -29,11 +29,17 @@ public class Main {
 	 *         the given file
 	 */
 	public static Student readStudent(File studentContactFile, JAXBContext jaxb) throws JAXBException {
-		Unmarshaller jaxbUnmarshaller = jaxb.createUnmarshaller();
-		Contact contact = (Contact) jaxbUnmarshaller.unmarshal(studentContactFile);
-		System.out.println(contact);
+		try {
+			Unmarshaller jaxbUnmarshaller = jaxb.createUnmarshaller();
+			Contact contact = (Contact) jaxbUnmarshaller.unmarshal(studentContactFile);
+			System.out.println(contact);
 
-		return new Student(contact);
+			return new Student(contact);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	/**
@@ -48,11 +54,17 @@ public class Main {
 	 *         in the given directory
 	 */
 	public static List<Student> readStudents(File studentDirectory, JAXBContext jaxb) throws JAXBException {
-		List<Student> studentList = new ArrayList<>();
-		for(File studentFile : studentDirectory.listFiles()) {
-			studentList.add(readStudent(studentFile, jaxb));
+		try {
+			List<Student> studentList = new ArrayList<>();
+			for (File studentFile : studentDirectory.listFiles()) {
+				studentList.add(readStudent(studentFile, jaxb));
+			}
+			return studentList;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
 		}
-		return studentList;
 	}
 
 	/**
@@ -67,12 +79,18 @@ public class Main {
 	 * @return an {@link Instructor} object built using the {@link Contact} data
 	 *         in the given file
 	 */
-	public static Instructor readInstructor(File instructorContactFile, JAXBContext jaxb) throws JAXBException{
-		Unmarshaller jaxbUnmarshaller = jaxb.createUnmarshaller();
-		Contact contact = (Contact) jaxbUnmarshaller.unmarshal(instructorContactFile);
-		System.out.println(contact);
+	public static Instructor readInstructor(File instructorContactFile, JAXBContext jaxb) throws JAXBException {
+		try {
+			Unmarshaller jaxbUnmarshaller = jaxb.createUnmarshaller();
+			Contact contact = (Contact) jaxbUnmarshaller.unmarshal(instructorContactFile);
+			System.out.println(contact);
 
-		return new Instructor(contact);
+			return new Instructor(contact);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	/**
@@ -93,12 +111,53 @@ public class Main {
 	 *         directory
 	 */
 	public static Session readSession(File rootDirectory, JAXBContext jaxb) throws JAXBException {
-		//JAXBContext jaxbContext = JAXBContext.newInstance(Session.class);
+		try {
+			Session session = new Session();
+			for (File location : rootDirectory.listFiles()) {
+				session.setLocation(location.getName());
+				for (File date : location.listFiles()) {
+					session.setStartDate(date.getName());
+					for (File studentDir : date.listFiles()) {
+						if (studentDir.isDirectory()) {
+							System.out.println(studentDir.getName());
+							List<Student> students = readStudents(studentDir, jaxb);
+							session.setStudents(students);
+						} else {
+							session.setInstructor(readInstructor(studentDir, jaxb));
+						}
+					}
+				}
+			}
+			return session;
+		} catch (Exception e) {
+			return null;
+		}
 
-		Unmarshaller jaxbUnmarshaller = jaxb.createUnmarshaller();
-		Session session = (Session) jaxbUnmarshaller.unmarshal(rootDirectory);
-		System.out.println(session);
-		return session;
+	}
+
+	/**
+	 * Creates a {@link Session} object using the given XML Session file path
+	 *
+	 * @param rootDirectory
+	 *            the root directory of the session data, named after the
+	 *            session location
+	 * @param jaxb
+	 *            the JAXB context to use
+	 * @return a {@link Session} object built from the data in the given
+	 *         directory
+	 */
+	public static Session readSessionXmlFile(File sessionXml, JAXBContext jaxb) throws JAXBException {
+
+		try {
+			Unmarshaller jaxbUnmarshaller = jaxb.createUnmarshaller();
+			Session session = (Session) jaxbUnmarshaller.unmarshal(sessionXml);
+			System.out.println(session);
+			return session;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 
 	}
 
@@ -114,15 +173,21 @@ public class Main {
 	 */
 	public static void writeSession(Session session, File sessionFile, JAXBContext jaxb) throws JAXBException {
 
-		Marshaller jaxbMarshaller = jaxb.createMarshaller();
+		try {
+			Marshaller jaxbMarshaller = jaxb.createMarshaller();
 
-		jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
-		// Marshal the employees list in console
-		jaxbMarshaller.marshal(session, System.out);
+			// Marshal the employees list in console
+			jaxbMarshaller.marshal(session, System.out);
 
-		// Marshal the employees list in file
-		jaxbMarshaller.marshal(session, sessionFile);
+			// Marshal the employees list in file
+			jaxbMarshaller.marshal(session, sessionFile);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return;
+		}
 	}
 
 	/**
@@ -162,10 +227,15 @@ public class Main {
 
 		File file = new File("./output/session.xml");
 
-		//writeSession(session, file, jaxbSessionContext);
-		//readSession(file, jaxbSessionContext);
-		//readStudent(new File("./input/memphis/08-08-2016/students/adam-fraser.xml"), jaxbStudentContext);
-		//readStudents(new File("./input/memphis/08-08-2016/students/"), jaxbStudentContext);
-		//readInstructor(new File("./input/memphis/08-08-2016/instructor.xml"), jaxbSessionContext);
+		readSession(new File("./input"), jaxbSessionContext);
+		// writeSession(session, file, jaxbSessionContext);
+		// readSessionXml(file, jaxbSessionContext);
+		// readStudent(new
+		// File("./input/memphis/08-08-2016/students/adam-fraser.xml"),
+		// jaxbStudentContext);
+		// readStudents(new File("./input/memphis/08-08-2016/students/"),
+		// jaxbStudentContext);
+		// readInstructor(new File("./input/memphis/08-08-2016/instructor.xml"),
+		// jaxbSessionContext);
 	}
 }
