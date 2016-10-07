@@ -2,41 +2,77 @@ package com.cooksys.serialization.assignment.model;
 
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement
 public class Session {
-    private String location;
-    private String startDate;
-    private Instructor instructor;
-    private List<Student> students;
 
-    public String getLocation() {
-        return location;
-    }
+	@XmlAttribute
+	private String location;
+	@XmlAttribute
+	private String startDate;
 
-    public void setLocation(String location) {
-        this.location = location;
-    }
+	
+	private Instructor instructor;
 
-    public String getStartDate() {
-        return startDate;
-    }
+	@XmlElement(name = "student")
+	private List<Student> students;
 
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
-    }
+	public Session() {
+	}
 
-    public Instructor getInstructor() {
-        return instructor;
-    }
+	public Session(String location, String startDate, Instructor instructor, List<Student> students) {
+		super();
+		this.location = location;
+		this.startDate = startDate;
+		this.instructor = instructor;
+		this.students = students;
+	}
 
-    public void setInstructor(Instructor instructor) {
-        this.instructor = instructor;
-    }
+	public String getLocation() {
+		return location;
+	}
 
-    public List<Student> getStudents() {
-        return students;
-    }
+	public void setLocation(String location) {
+		this.location = location;
+	}
 
-    public void setStudents(List<Student> students) {
-        this.students = students;
-    }
+	public String getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(String startDate) {
+		this.startDate = startDate;
+	}
+
+	public Instructor getInstructor() {
+		return instructor;
+	}
+
+	public void setInstructor(Instructor instructor) {
+		this.instructor = instructor;
+	}
+
+	public List<Student> getStudents() {
+		return students;
+	}
+
+	public void setStudents(List<Student> students) {
+		this.students = students;
+	}
+
+	@Override
+	public String toString() {
+		for (Student student : students) {
+			return "Session [location=" + location + ", startDate=" + startDate + ", instructor="
+					+ instructor.getContact().toString() + "," + "studnet = " + student.getContact().toString() + "]";
+		}
+		return "";
+	}
+
 }
