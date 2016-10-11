@@ -178,10 +178,8 @@ public class Main {
 
 			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
-			// Marshal the employees list in console
 			jaxbMarshaller.marshal(session, System.out);
 
-			// Marshal the employees list in file
 			jaxbMarshaller.marshal(session, sessionFile);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
