@@ -1,21 +1,17 @@
 package com.cooksys.ftd.assignments.socket;
 
-import java.beans.XMLDecoder;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.stream.XMLEventReader;
 
 import com.cooksys.ftd.assignments.socket.model.Config;
 import com.cooksys.ftd.assignments.socket.model.Student;
 
-public class Client {
+public class Client extends Thread {
 
 	/**
 	 * The client should load a
@@ -30,25 +26,36 @@ public class Client {
 	 * {@link com.cooksys.ftd.assignments.socket.model.Student} object over the
 	 * socket as xml, and should unmarshal that object before printing its
 	 * details to the console.
-	 * 
-	 * @throws JAXBException
-	 * @throws IOException 
-	 * @throws UnknownHostException 
 	 */
-	public static void main(String[] args) throws JAXBException, UnknownHostException, IOException {
-		Config config = Utils.loadConfig("./config/config.xml", Utils.createJAXBContext());
-		int port = config.getRemote().getPort();
-		String host = config.getRemote().getHost();
-		
-		Socket server = new Socket(host, port);
-		
-		JAXBContext jaxb = JAXBContext.newInstance(Student.class);
-		
-		Unmarshaller jaxbUnmarshaller = jaxb.createUnmarshaller();
-		Student student = (Student) jaxbUnmarshaller.unmarshal(server.getInputStream());
-		System.out.println(student.toString());
-		
-		 server.close();
+	@Override
+	public void run() {
+		System.out.println("CLIENT: Client starting up");
+		try {
+			Config config = Utils.loadConfig("./config/config.xml", Utils.createJAXBContext());
+			int port = config.getRemote().getPort();
+			String host = config.getRemote().getHost();
+			
+			Socket server = new Socket(host, port);
+			
+			JAXBContext jaxb = JAXBContext.newInstance(Student.class);
+			
+			Unmarshaller jaxbUnmarshaller = jaxb.createUnmarshaller();
+			System.out.println("CLIENT: Requesting information from server");
+			Student student = (Student) jaxbUnmarshaller.unmarshal(server.getInputStream());
+			System.out.println("CLIENT: Student received");
+			System.out.println(student.toString());
+			
+			 server.close();
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JAXBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 }

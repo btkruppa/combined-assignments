@@ -4,17 +4,17 @@ import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.PropertyException;
 import javax.xml.bind.Unmarshaller;
 
 import com.cooksys.ftd.assignments.socket.model.Config;
 import com.cooksys.ftd.assignments.socket.model.Student;
 
-public class Server extends Utils {
+public class Server extends Thread {
 
 	/**
 	 * Reads a {@link Student} object from the given file path
@@ -49,37 +49,43 @@ public class Server extends Utils {
 	 *
 	 * Following this transaction, the server may shut down or listen for more
 	 * connections.
-	 * 
-	 * @throws JAXBException
-	 * @throws IOException
-	 * @throws UnknownHostException
 	 */
-	public static void main(String[] args) throws JAXBException, UnknownHostException, IOException {
-		JAXBContext jaxbStudent = JAXBContext.newInstance(Student.class);
-		JAXBContext jaxbConfig = Utils.createJAXBContext();
-		Config config = loadConfig("./config/config.xml", jaxbConfig);
-		int port = config.getLocal().getPort();
-		ServerSocket server = new ServerSocket(port);
-		boolean bool = true;
-		while (bool) {
+	@Override
+	public void run() {
+		System.out.println("SERVER: Starting server at localhost");
+		try {
+			JAXBContext jaxbStudent = JAXBContext.newInstance(Student.class);
+			JAXBContext jaxbConfig = Utils.createJAXBContext();
+			Config config = Utils.loadConfig("./config/config.xml", jaxbConfig);
+			int port = config.getLocal().getPort();
+			ServerSocket server = new ServerSocket(port);
+			boolean bool = true;
+			while (bool) {
+				System.out.println("SERVER: Server waiting for request");
+				Socket client = server.accept();
+				System.out.println("SERVER: Request received");
+				Marshaller jaxbMarshaller = jaxbStudent.createMarshaller();
 
-			
+				jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
-			Socket client = server.accept();
+				Student student = loadStudent("./config/student.xml", jaxbStudent);
+				System.out.println("SERVER: Sending student xml content");
+				jaxbMarshaller.marshal(student, client.getOutputStream());
 
-			Marshaller jaxbMarshaller = jaxbStudent.createMarshaller();
-
-			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-
-			Student student = loadStudent("./config/student.xml", jaxbStudent);
-
-			jaxbMarshaller.marshal(student, client.getOutputStream());
-
-			client.close();
-			
-			
+				client.close();
+				
+			}
+			server.close();
+		} catch (PropertyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JAXBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		server.close();
 
 	}
 }
