@@ -73,7 +73,7 @@ public class Server extends Thread {
 				jaxbMarshaller.marshal(student, client.getOutputStream());
 
 				client.close();
-				
+
 			}
 			server.close();
 		} catch (PropertyException e) {

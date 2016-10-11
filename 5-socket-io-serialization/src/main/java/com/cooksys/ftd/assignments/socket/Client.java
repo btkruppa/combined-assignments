@@ -34,18 +34,18 @@ public class Client extends Thread {
 			Config config = Utils.loadConfig("./config/config.xml", Utils.createJAXBContext());
 			int port = config.getRemote().getPort();
 			String host = config.getRemote().getHost();
-			
+
 			Socket server = new Socket(host, port);
-			
+
 			JAXBContext jaxb = JAXBContext.newInstance(Student.class);
-			
+
 			Unmarshaller jaxbUnmarshaller = jaxb.createUnmarshaller();
 			System.out.println("CLIENT: Requesting information from server");
 			Student student = (Student) jaxbUnmarshaller.unmarshal(server.getInputStream());
 			System.out.println("CLIENT: Student received");
 			System.out.println(student.toString());
-			
-			 server.close();
+
+			server.close();
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -56,6 +56,6 @@ public class Client extends Thread {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 }
