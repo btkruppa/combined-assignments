@@ -16,6 +16,7 @@ public class Config {
 
     @XmlElement(name = "student-file-path")
     private String studentFilePath;
+    
 
     public LocalConfig getLocal() {
         return local;

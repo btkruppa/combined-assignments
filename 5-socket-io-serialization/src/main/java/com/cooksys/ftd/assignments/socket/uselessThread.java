@@ -3,7 +3,7 @@ package com.cooksys.ftd.assignments.socket;
 public class uselessThread extends Thread{
 
 	public void run() {
-		System.out.println(this.currentThread().getName());
+		System.out.println(currentThread().getName());
 		try {
 			sleep(1000000);
 			System.out.println("done");

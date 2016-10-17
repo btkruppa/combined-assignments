@@ -33,7 +33,7 @@ public class Utils {
     	Unmarshaller jaxbUnmarshaller = jaxb.createUnmarshaller();
 		File filePath = new File(configFilePath);
 		Config config = (Config) jaxbUnmarshaller.unmarshal(filePath);
-
 		return config;
+		
     }
 }

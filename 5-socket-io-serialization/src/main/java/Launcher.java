@@ -15,6 +15,8 @@ public class Launcher {
 	 */
 	public static void main(String[] args) throws InterruptedException {
 		//System.out.println(Runtime.getRuntime().availableProcessors());
+		//system.get
+		//System.out.println(Thread);
 		Client client = new Client();
 		client.start();
 		Thread.sleep(2000);
