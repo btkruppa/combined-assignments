@@ -5,13 +5,14 @@ import java.nio.file.Paths;
 
 import javax.xml.bind.JAXBException;
 
-import com.cooksys.ftd.assignments.concurrency.model.config.Config;
-import com.cooksys.ftd.assignments.concurrency.model.config.ServerConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import Util.Debugger;
-import javassist.compiler.Javac;
+import com.cooksys.ftd.assignments.concurrency.model.config.Config;
 
 public class Main {
+	
+	static Logger log = LoggerFactory.getLogger(Main.class);
 
 	/**
 	 * First, load a
@@ -29,7 +30,7 @@ public class Main {
 	 * config ans spin off a thread to run it.
 	 * 
 	 * @throws JAXBException
-	 * @throws InterruptedException 
+	 * @throws InterruptedException
 	 */
 	public static void main(String[] args) throws JAXBException, InterruptedException {
 		Path configPath = Paths.get("./config/config.xml");
@@ -37,22 +38,29 @@ public class Main {
 
 		// start the thread for managing the server if it is not disabled
 		if (!config.getServer().isDisabled()) {
-			Debugger.debugMessage("Starting new thread for our server");
+			// Debugger.debugMessage("Starting new thread for our server");
+
+			log.info("Starting new thread for our server");
+
 			Server server = new Server(config.getServer());
 			new Thread(server).start();
 		}
-		
+
 		Thread.sleep(500);
-		
-		// start the thread to configure client instances if they are not disabeled
+
+		// start the thread to configure client instances if they are not
+		// disabeled
 		if (!config.getClient().isDisabled()) {
 			Client client = new Client(config.getClient());
-			Debugger.debugMessage("Starting up client manager on new thread");
+			log.info("Starting up client manager on new thread");
+			// Debugger.debugMessage("Starting up client manager on new
+			// thread");
 			new Thread(client).start();
-
 		}
-		
-		Thread.sleep(2000);
-		System.out.println(Thread.activeCount());
+
+//		while (true) {
+//			Thread.sleep(2000);
+//			System.out.println(Thread.activeCount());
+//		}
 	}
 }

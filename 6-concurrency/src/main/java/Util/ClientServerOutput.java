@@ -1,8 +1,8 @@
 package Util;
 
 public class ClientServerOutput {
-	private static boolean clientOutput = false; //true to output client logs
-	private static boolean serverOutput = true; //true to output server logs
+	private static boolean clientOutput = true; //true to output client logs
+	private static boolean serverOutput = false; //true to output server logs
 	public static void clientOutput(String message) {
 		if(clientOutput) {
 			System.out.println("CLIENT: " + message);

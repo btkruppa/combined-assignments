@@ -5,6 +5,9 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.cooksys.ftd.assignments.concurrency.model.config.ClientConfig;
 import com.cooksys.ftd.assignments.concurrency.model.config.ClientInstanceConfig;
 import com.cooksys.ftd.assignments.concurrency.model.config.SpawnStrategy;
@@ -12,6 +15,8 @@ import com.cooksys.ftd.assignments.concurrency.model.config.SpawnStrategy;
 import Util.Debugger;
 
 public class Client implements Runnable {
+	
+	static Logger log = LoggerFactory.getLogger(Client.class);
 
 	private static int port;
 	private static String host;
@@ -35,26 +40,21 @@ public class Client implements Runnable {
 			case NONE:
 				break;
 			case PARALLEL:
-				Debugger.debugMessage("Starting up clients in parallel mode");
+				log.info("Starting up clients in parallel mode");
+				//Debugger.debugMessage("Starting up clients in parallel mode");
 				for (ClientInstanceConfig clientInstanceConfig : instances) {
-					Socket client = new Socket(host, port);
-					new Thread(new ClientInstance(clientInstanceConfig, client)).start();
+					new Thread(new ClientInstance(clientInstanceConfig, host, port)).start();
 					Thread.sleep(50);
 				}
 				break;
 			case SEQUENTIAL:
-				Debugger.debugMessage("Starting up clients in sequential mode");
+				
+				log.info("Starting up clients in sequential mode");
 				for (ClientInstanceConfig clientInstanceConfig : instances) {
-					Socket client = new Socket(host, port);
-					new ClientInstance(clientInstanceConfig, client).run();
-					client.close();
+					new ClientInstance(clientInstanceConfig, host, port).run();
 				}
 				break;
 			}
-		} catch (UnknownHostException e) {
-			Debugger.errorStackTrace(e);
-		} catch (IOException e) {
-			Debugger.errorStackTrace(e);
 		} catch (InterruptedException e) {
 			Debugger.errorStackTrace(e);
 		}
